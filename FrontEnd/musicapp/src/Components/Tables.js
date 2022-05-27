@@ -16,11 +16,11 @@ function Tables() {
 
     songName: "",
     singerName: "",
-    movieName: ""
+   
 
   })
 
-  const { songName, singerName, movieName } = inputs
+  const { songName, singerName, } = inputs
 
   const handleChange = (e) => {
     setInputs({ ...inputs, [e.target.name]: e.target.value })
@@ -33,7 +33,7 @@ function Tables() {
 
       songName: songName,
       singerName: singerName,
-      movieName: movieName
+   
 
 
     }, {
@@ -51,12 +51,7 @@ function Tables() {
 
  
 
-  React.useEffect(()=>{
-      let data = localStorage.getItem("auth-token")
-      if (!data){
-          navigate("/login")
-      }
-  }, [])
+  
 
 
 
@@ -64,6 +59,9 @@ function Tables() {
     <div>
 
       <Container fixed>
+
+
+     
 
         <form onSubmit={handleSubmit}>
           <Grid container spacing={2} sx={{ mt: 5 }}>

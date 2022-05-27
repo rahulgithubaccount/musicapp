@@ -11,6 +11,7 @@ const Song= require("./models/SongsSchema")
 const { body, validationResult } = require('express-validator');
 var jwt = require('jsonwebtoken');
 const fetchdata = require("./middleware/fetchdata");
+const { response } = require("express");
 app.use(cors())
 
 
@@ -58,7 +59,7 @@ body('password').isLength({ min: 5 }),],  async  (req, res) => {
   success = true
   const jwtData = jwt.sign(data, JWt_SECRET)
   console.log(jwtData)
-  res.status(200).json({success, jwtData })
+  res.status(200).json({success, jwtData,user })
 
 
 
@@ -70,6 +71,26 @@ body('password').isLength({ min: 5 }),],  async  (req, res) => {
 
 
 })
+
+
+
+// getAll datas
+
+
+// app.get("/getalluser/:id",async(req,res)=>{
+//   try {
+//     const user = await User.findById(req.params.id)
+
+//    if(!user){
+//      return  res.status(400).json("user not found")
+//    }
+//   return  res.status(200).json(user) 
+
+//   } catch (error) {
+//     console.log(error +" some error ")
+//   }
+
+// })
 
 
 //user log in 
@@ -88,9 +109,6 @@ body('password', "password doesnot match ").exists()] ,async (req, res) => {
   if (!user) {
     res.status(400).json("user not found ")
   }
-
-
-
   const passwordCompare = await bcrypt.compare(password, user.password)
 
   let success = false
@@ -98,13 +116,12 @@ body('password', "password doesnot match ").exists()] ,async (req, res) => {
     res.status(400).json("user not found ")
   }
 
-
   console.log(req.body)
-
-
   const data = {
     user: {
-      id: user.id
+      id: user.id,
+      fName:user.fName
+
     }
   }
 
@@ -114,8 +131,6 @@ body('password', "password doesnot match ").exists()] ,async (req, res) => {
   res.status(200).json({success, jwtData })
 
 });
-
-
 
 
 
@@ -147,6 +162,19 @@ app.post("/postsong",fetchdata,(req,res)=>{
 
 
 
+// delete add songs api
+
+
+app.delete("/delete/:id", async(req,res)=>{
+
+
+  const user = await Song.findByIdAndDelete(req.params.id)
+  if(!user){
+    return res.status(400).json("user not found")
+  }
+ return res.status(200).send("user deleted")
+
+})
 
 
 app.listen(port, () => {

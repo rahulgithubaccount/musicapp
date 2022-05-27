@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {  useState } from 'react';
 import { Grid, Paper, Avatar, Typography, TextField, Button } from '@mui/material/';
 import axios from "axios"
 import {useNavigate} from "react-router-dom"
@@ -9,7 +9,7 @@ const LogIn = () => {
     const avatarStyle = { backgroundColor: "#1976d2" }
     const marginTop = { marginTop: 15 }
 
-    const error = "user not fount"
+   
 
     const navigate = useNavigate();
 
@@ -43,19 +43,28 @@ const LogIn = () => {
           localStorage.setItem("auth-token",JSON.stringify(response.data.jwtData))
        
       }
+      else if(response.status === 400)
+        {
+            navigate("/")
 
-      else if(response.status === 400){
-       alert("user not found")
-      } 
-         
-      
+        }
+    
+
       console.log(response.data)
       
     }
+   
+
+
+
 
 
 
     return (
+        <>
+
+       
+        
         <Grid  style={{marginTop:"40px"}}>
        
        <div className="mt-30">
@@ -102,6 +111,7 @@ const LogIn = () => {
             </Paper>
             </div>
         </Grid>
+        </>
     )
 }
 

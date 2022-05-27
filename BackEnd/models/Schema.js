@@ -2,6 +2,9 @@ const mongoose = require("mongoose")
 
 
 const UserSchema =  new mongoose.Schema({
+
+
+
     fName:{
         type:String,
         required:true

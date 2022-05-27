@@ -8,6 +8,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -36,8 +37,9 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 export default function SongsTable() {
 
     useEffect(()=>{
-
+      getAllUser();
         getdata();
+       
         },[])
         
         const [songs,setsongs]= useState([])
@@ -53,15 +55,44 @@ export default function SongsTable() {
         console.log(response.data.songs)
         }
 
+
+        const deletehandle= async(_id)=>{
+          await axios.delete(`http://localhost:8000/delete/${_id}`)
+          .then((res)=>{
+            console.log(res)
+          }).catch((err)=>{
+            console.log(err)
+          })
+window.location.reload(true)
+        }
+
+
+const[user,setUser]= useState([])
+
+
+        const getAllUser =async (_id)=>{
+          const getalluser= await axios.get(`http://localhost:8000/getalluser/${_id}`)
+        
+
+          setUser(getalluser)
+          console.log(getalluser.data)
+        }
+
   return (
+<>
+
+{user.fName} gug
     <TableContainer component={Paper}>
+
+
+
       <Table sx={{ minWidth: 700 }} aria-label="customized table">
         <TableHead>
           <TableRow>
             <StyledTableCell>S.no</StyledTableCell>
             <StyledTableCell align="center">Song Name</StyledTableCell>
             <StyledTableCell align="center">Singer Name</StyledTableCell>
-          
+            <StyledTableCell align="center">Action</StyledTableCell>
           
           </TableRow>
         </TableHead>
@@ -78,12 +109,19 @@ export default function SongsTable() {
               <StyledTableCell component="th" align="center" scope="row">
                 {item.singerName}
               </StyledTableCell>
+
+              <StyledTableCell component="th" align="center" scope="row">
+                <button style={{border:"none", backgroundColor:"none"}} onClick={()=>deletehandle(item._id)}> <DeleteIcon  style={{ fill:"rgb(229 57 57)",  backgroundColor:"none" }}/> </button>
+              </StyledTableCell>
         
          
             </StyledTableRow>
           ))}
         </TableBody>
       </Table>
+
+     
     </TableContainer>
+    </>
   );
 }

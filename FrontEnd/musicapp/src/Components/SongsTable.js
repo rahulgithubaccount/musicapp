@@ -37,10 +37,11 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 export default function SongsTable() {
 
     useEffect(()=>{
-      getAllUser();
+   
         getdata();
        
         },[])
+
         
         const [songs,setsongs]= useState([])
         
@@ -67,21 +68,21 @@ window.location.reload(true)
         }
 
 
-const[user,setUser]= useState([])
+// const[user,setUser]= useState([])
 
 
-        const getAllUser =async (_id)=>{
-          const getalluser= await axios.get(`http://localhost:8000/getalluser/${_id}`)
-        
+//         const getAllUser =async (id)=>{
+//           const getalluser= await axios.get(`http://localhost:8000/getalluser/${id}`)
+      
 
-          setUser(getalluser)
-          console.log(getalluser.data)
-        }
+//           setUser(getalluser)
+//           console.log(getalluser.data= "hello")
+//         }
 
   return (
 <>
 
-{user.fName} gug
+
     <TableContainer component={Paper}>
 
 

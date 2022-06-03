@@ -11,7 +11,8 @@ const Song= require("./models/SongsSchema")
 const { body, validationResult } = require('express-validator');
 var jwt = require('jsonwebtoken');
 const fetchdata = require("./middleware/fetchdata");
-const { response } = require("express");
+const multer  = require('multer')
+const path  = require('path')
 app.use(cors())
 
 
@@ -78,8 +79,9 @@ body('password').isLength({ min: 5 }),],  async  (req, res) => {
 
 
 // app.get("/getalluser/:id",async(req,res)=>{
+//   const _id = req.params.id
 //   try {
-//     const user = await User.findById(req.params.id)
+//     const user = await User.findById({_id})
 
 //    if(!user){
 //      return  res.status(400).json("user not found")
@@ -87,7 +89,7 @@ body('password').isLength({ min: 5 }),],  async  (req, res) => {
 //   return  res.status(200).json(user) 
 
 //   } catch (error) {
-//     console.log(error +" some error ")
+//     console.log(error +" some error in get userdata ")
 //   }
 
 // })
@@ -146,7 +148,23 @@ app.get("/getallsong",fetchdata, async(req,res)=>{
 
 
 // post notes
-app.post("/postsong",fetchdata,(req,res)=>{
+
+const dirName = path.join("../public/images")
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, dirName)
+  },
+  filename: function (req, file, cb) {
+   
+    cb(null, file.fieldname,Date.now() + '-' + filename)
+  }
+})
+
+const upload = multer({ storage: storage })
+
+
+app.post("/postsong",fetchdata,upload.single("image"),(req,res)=>{
   const {songName,singerName}= req.body
 
   const song = new Song({

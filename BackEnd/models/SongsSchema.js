@@ -10,6 +10,7 @@ user:{
 },
 
 
+
 singerName:{
         type:String,
         required:true

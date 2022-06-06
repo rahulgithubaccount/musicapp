@@ -17,9 +17,6 @@ app.use(cors())
 
 
 
-
-
-
 const JWt_SECRET = "helloworld";
 
 app.post("/postdata", [body('email').isEmail(),
@@ -66,11 +63,6 @@ body('password').isLength({ min: 5 }),],  async  (req, res) => {
 
   user.save()
 
-
-
-
-
-
 })
 
 
@@ -78,10 +70,14 @@ body('password').isLength({ min: 5 }),],  async  (req, res) => {
 // getAll datas
 
 
+
+
+
+
 // app.get("/getalluser/:id",async(req,res)=>{
-//   const _id = req.params.id
+ 
 //   try {
-//     const user = await User.findById({_id})
+//     const user = await User.findById(req.params.id)
 
 //    if(!user){
 //      return  res.status(400).json("user not found")
@@ -122,7 +118,6 @@ body('password', "password doesnot match ").exists()] ,async (req, res) => {
   const data = {
     user: {
       id: user.id,
-      fName:user.fName
 
     }
   }
@@ -149,26 +144,33 @@ app.get("/getallsong",fetchdata, async(req,res)=>{
 
 // post notes
 
-const dirName = path.join("../public/images")
+const dirName = path.join( __dirname,"../FrontEnd/musicapp/public/image");
 
 const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, dirName)
-  },
-  filename: function (req, file, cb) {
-   
-    cb(null, file.fieldname,Date.now() + '-' + filename)
-  }
-})
 
-const upload = multer({ storage: storage })
+    destination: function (req, file, cb) {
+      cb(null, dirName)
+    },
+    filename: function (req, file, cb) {
+      
+      cb(null, Date.now() + '--' + file.originalname)
+    }
+  })
 
 
-app.post("/postsong",fetchdata,upload.single("image"),(req,res)=>{
+  
+  const upload = multer({ storage: storage })
+
+
+app.post("/postsong",upload.single("image"),fetchdata,(req,res)=>{
   const {songName,singerName}= req.body
 
   const song = new Song({
-    songName,singerName, user:req.user.id
+    songName,
+    singerName,
+     user:req.user.id,
+     image:req.file.filename
+
   })
 
 

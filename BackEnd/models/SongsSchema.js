@@ -11,17 +11,12 @@ user:{
 
 
 
-singerName:{
-        type:String,
-        required:true
-    },
- 
 
-    songName:{
+
+  image:{
         type:String,
-        required:true,
-        
-    },
+      
+    }
   
   
 })

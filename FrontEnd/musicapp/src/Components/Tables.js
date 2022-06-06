@@ -20,6 +20,15 @@ function Tables() {
 
   })
 
+
+  const [image,setImage]= useState(null)
+
+const ImageChange= (e)=>{
+  setImage(e.target.files[0])
+  console.log(e.terget.files[0])
+} 
+
+
   const { songName, singerName, } = inputs
 
   const handleChange = (e) => {
@@ -28,15 +37,17 @@ function Tables() {
 
 
   const handleSubmit = async (e) => {
+
+const formdata = new FormData();
+
+formdata.append("songName",songName);
+formdata.append("singerName",singerName);
+formdata.append("image",image);
+
     e.preventDefault();
-    await axios.post("http://localhost:8000/postsong", {
+    await axios.post("http://localhost:8000/postsong", formdata
 
-      songName: songName,
-      singerName: singerName,
-   
-
-
-    }, {
+    , {
       headers: {
         'auth-token': JSON.parse(localStorage.getItem("auth-token"))
       }
@@ -44,9 +55,7 @@ function Tables() {
 
 
     )
-    window.location.reload(true);
-
-
+   
   }
 
  
@@ -65,38 +74,25 @@ function Tables() {
 
         <form onSubmit={handleSubmit}>
           <Grid container spacing={2} sx={{ mt: 5 }}>
+        
+
             <Grid item lg={6}>
               <TextField
                 fullWidth
-                label='Song Name'
-                placeholder="Enter your Song Name"
+            
+                
                 style={marginTop}
                 required={true}
-                type="text"
-                onChange={handleChange}
-                name="songName"
-                value={inputs.songName}
+                type="file"
+                onChange={ImageChange}
+                name="image"
+               
               />
-
             </Grid>
             <Grid item lg={6}>
-              <TextField
-                fullWidth
-                label='Singer Name'
-                placeholder="Enter your Singer Name"
-                style={marginTop}
-                required={true}
-                type="text"
-                onChange={handleChange}
-                name="singerName"
-                value={inputs.singerName}
-              />
+
+            <Button type='submit' variant='contained' color='primary' style={{ margin: "23px auto" }}>Submit</Button>
             </Grid>
-
-          
-
-
-            <Button type='submit' variant='contained' color='primary' style={{ margin: "34px auto" }}>Submit</Button>
           </Grid>
         </form>
 
